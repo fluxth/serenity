@@ -7,12 +7,12 @@
 #include <Kernel/Debug.h>
 #include <Kernel/Locking/Mutex.h>
 #include <Kernel/Locking/MutexProtected.h>
-#include <Kernel/Net/ARP.h>
 #include <Kernel/Net/EtherType.h>
 #include <Kernel/Net/EthernetFrameHeader.h>
-#include <Kernel/Net/ICMP.h>
-#include <Kernel/Net/IPv4.h>
-#include <Kernel/Net/IPv4Socket.h>
+#include <Kernel/Net/IPv4/ARP.h>
+#include <Kernel/Net/IPv4/ICMP.h>
+#include <Kernel/Net/IPv4/IPv4.h>
+#include <Kernel/Net/IPv4/IPv4Socket.h>
 #include <Kernel/Net/LoopbackAdapter.h>
 #include <Kernel/Net/NetworkTask.h>
 #include <Kernel/Net/NetworkingManagement.h>

@@ -15,10 +15,10 @@
 #include <AK/Weakable.h>
 #include <Kernel/Bus/PCI/Definitions.h>
 #include <Kernel/KBuffer.h>
-#include <Kernel/Net/ARP.h>
 #include <Kernel/Net/EthernetFrameHeader.h>
-#include <Kernel/Net/ICMP.h>
-#include <Kernel/Net/IPv4.h>
+#include <Kernel/Net/IPv4/ARP.h>
+#include <Kernel/Net/IPv4/ICMP.h>
+#include <Kernel/Net/IPv4/IPv4.h>
 #include <Kernel/UserOrKernelBuffer.h>
 
 namespace Kernel {

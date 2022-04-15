@@ -12,7 +12,7 @@
 #include <AK/SinglyLinkedList.h>
 #include <AK/WeakPtr.h>
 #include <Kernel/Locking/MutexProtected.h>
-#include <Kernel/Net/IPv4Socket.h>
+#include <Kernel/Net/IPv4/IPv4Socket.h>
 
 namespace Kernel {
 

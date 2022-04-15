@@ -7,7 +7,7 @@
 #pragma once
 
 #include <AK/StdLibExtras.h>
-#include <Kernel/Net/IPv4.h>
+#include <Kernel/Net/IPv4/IPv4.h>
 
 namespace Kernel {
 

@@ -8,7 +8,7 @@
 
 #include <AK/Error.h>
 #include <Kernel/Locking/MutexProtected.h>
-#include <Kernel/Net/IPv4Socket.h>
+#include <Kernel/Net/IPv4/IPv4Socket.h>
 
 namespace Kernel {
 
