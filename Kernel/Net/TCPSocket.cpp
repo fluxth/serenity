@@ -234,7 +234,7 @@ ErrorOr<void> TCPSocket::send_tcp_packet(u16 flags, UserOrKernelBuffer const* pa
     if (!packet)
         return set_so_error(ENOMEM);
     routing_decision.adapter->fill_in_ipv4_header(*packet, local_address(),
-        routing_decision.next_hop, peer_address(), IPv4Protocol::TCP,
+        routing_decision.next_hop, peer_address(), IPProtocol::TCP,
         buffer_size - ipv4_payload_offset, type_of_service(), ttl());
     memset(packet->buffer->data() + ipv4_payload_offset, 0, sizeof(TCPPacket));
     auto& tcp_packet = *(TCPPacket*)(packet->buffer->data() + ipv4_payload_offset);
@@ -359,7 +359,7 @@ NetworkOrdered<u16> TCPSocket::compute_tcp_checksum(IPv4Address const& source, I
         NetworkOrdered<u16> payload_size;
     };
 
-    PseudoHeader pseudo_header { source, destination, 0, (u8)IPv4Protocol::TCP, packet.header_size() + payload_size };
+    PseudoHeader pseudo_header { source, destination, 0, (u8)IPProtocol::TCP, packet.header_size() + payload_size };
 
     u32 checksum = 0;
     auto raw_pseudo_header = bit_cast<u16*>(&pseudo_header);
@@ -615,7 +615,7 @@ void TCPSocket::retransmit_packets()
 
             routing_decision.adapter->fill_in_ipv4_header(*packet.buffer,
                 local_address(), routing_decision.next_hop, peer_address(),
-                IPv4Protocol::TCP, packet_buffer.size() - ipv4_payload_offset, type_of_service(), ttl());
+                IPProtocol::TCP, packet_buffer.size() - ipv4_payload_offset, type_of_service(), ttl());
             routing_decision.adapter->send_packet(packet_buffer);
             m_packets_out++;
             m_bytes_out += packet_buffer.size();

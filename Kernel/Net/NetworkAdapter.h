@@ -69,7 +69,7 @@ public:
     void set_ipv4_gateway(IPv4Address const&);
 
     void send(MACAddress const&, ARPPacket const&);
-    void fill_in_ipv4_header(PacketWithTimestamp&, IPv4Address const&, MACAddress const&, IPv4Address const&, IPv4Protocol, size_t, u8 type_of_service, u8 ttl);
+    void fill_in_ipv4_header(PacketWithTimestamp&, IPv4Address const&, MACAddress const&, IPv4Address const&, IPProtocol, size_t, u8 type_of_service, u8 ttl);
 
     size_t dequeue_packet(u8* buffer, size_t buffer_size, Time& packet_timestamp);
 
