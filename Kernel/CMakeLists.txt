@@ -186,6 +186,7 @@ set(KERNEL_SOURCES
     Net/Realtek/RTL8139NetworkAdapter.cpp
     Net/Realtek/RTL8168NetworkAdapter.cpp
     Net/IPv4/IPv4Socket.cpp
+    Net/IPv6/ND.cpp
     Net/LocalSocket.cpp
     Net/LoopbackAdapter.cpp
     Net/NetworkAdapter.cpp

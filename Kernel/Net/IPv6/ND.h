@@ -8,11 +8,4 @@
 
 namespace Kernel {
 
-enum class IPProtocol : u16 {
-    ICMP = 1,
-    TCP = 6,
-    UDP = 17,
-    ICMPv6 = 58,
-};
-
 }

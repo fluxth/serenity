@@ -13,6 +13,8 @@
 #include <Kernel/Net/IPv4/ICMP.h>
 #include <Kernel/Net/IPv4/IPv4.h>
 #include <Kernel/Net/IPv4/IPv4Socket.h>
+#include <Kernel/Net/IPv6/ICMPv6.h>
+#include <Kernel/Net/IPv6/IPv6.h>
 #include <Kernel/Net/LoopbackAdapter.h>
 #include <Kernel/Net/NetworkTask.h>
 #include <Kernel/Net/NetworkingManagement.h>
@@ -27,7 +29,9 @@ namespace Kernel {
 
 static void handle_arp(EthernetFrameHeader const&, size_t frame_size);
 static void handle_ipv4(EthernetFrameHeader const&, size_t frame_size, Time const& packet_timestamp);
+static void handle_ipv6(EthernetFrameHeader const&, size_t frame_size, Time const& packet_timestamp);
 static void handle_icmp(EthernetFrameHeader const&, IPv4Packet const&, Time const& packet_timestamp);
+static void handle_icmpv6(EthernetFrameHeader const&, IPv6Packet const&, Time const& packet_timestamp);
 static void handle_udp(IPv4Packet const&, Time const& packet_timestamp);
 static void handle_tcp(IPv4Packet const&, Time const& packet_timestamp);
 static void send_delayed_tcp_ack(RefPtr<TCPSocket> socket);
@@ -123,7 +127,7 @@ void NetworkTask_main(void*)
             handle_ipv4(eth, packet_size, packet_timestamp);
             break;
         case EtherType::IPv6:
-            // ignore
+            handle_ipv6(eth, packet_size, packet_timestamp);
             break;
         default:
             dbgln_if(ETHERNET_DEBUG, "NetworkTask: Unknown ethernet type {:#04x}", eth.ether_type());
@@ -223,6 +227,33 @@ void handle_ipv4(EthernetFrameHeader const& eth, size_t frame_size, Time const& 
     }
 }
 
+void handle_ipv6(EthernetFrameHeader const& eth, size_t frame_size, Time const& packet_timestamp)
+{
+    dbgln("ETH: {} -> {} [{}]", eth.source().to_string(), eth.destination().to_string(), frame_size);
+    // ouch
+    auto& packet = *static_cast<IPv6Packet const*>(eth.payload());
+    //packet.set_version(7);
+    //packet.set_traffic_class(99);
+    //packet.set_flow_label(0xdeadd);
+    packet.print();
+
+    switch ((IPProtocol)packet.next_header()) {
+    case IPProtocol::ICMPv6:
+        dbgln("got icmpv6");
+        handle_icmpv6(eth, packet, packet_timestamp);
+        break;
+    case IPProtocol::UDP:
+        dbgln("got udp");
+        break;
+    case IPProtocol::TCP:
+        dbgln("got tcp");
+        break;
+    default:
+        dbgln_if(IPV6_DEBUG, "handle_ipv6: Unhandled next_header {:#02x}", packet.next_header());
+        break;
+    }
+}
+
 void handle_icmp(EthernetFrameHeader const& eth, IPv4Packet const& ipv4_packet, Time const& packet_timestamp)
 {
     auto& icmp_header = *static_cast<ICMPHeader const*>(ipv4_packet.payload());
@@ -272,6 +303,15 @@ void handle_icmp(EthernetFrameHeader const& eth, IPv4Packet const& ipv4_packet, 
         adapter->send_packet(packet->bytes());
         adapter->release_packet_buffer(*packet);
     }
+}
+
+void handle_icmpv6(EthernetFrameHeader const& eth, IPv6Packet const& ipv6_packet, Time const& packet_timestamp)
+{
+    (void)eth;
+    (void)packet_timestamp;
+    auto& icmp_header = *static_cast<ICMPv6Header const*>(ipv6_packet.payload());
+    dbgln("handle_icmpv6: source={}, destination={}, type={:#02x}, code={:#02x}", ipv6_packet.source().to_string(), ipv6_packet.destination().to_string(), icmp_header.type(), icmp_header.code());
+
 }
 
 void handle_udp(IPv4Packet const& ipv4_packet, Time const& packet_timestamp)
