@@ -9,6 +9,8 @@
 #include <AK/MACAddress.h>
 #include <Kernel/Net/IPv4/IPv4.h>
 
+namespace Kernel {
+
 struct ICMPType {
     enum {
         EchoReply = 0,
@@ -49,3 +51,5 @@ struct [[gnu::packed]] ICMPEchoPacket {
     void* payload() { return this + 1; }
     void const* payload() const { return this + 1; }
 };
+
+}
