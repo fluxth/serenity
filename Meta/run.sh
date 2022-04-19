@@ -467,9 +467,15 @@ else
     if [ "$SERENITY_ARCH" = "aarch64" ]; then
         SERENITY_NETFLAGS=
     else
+        #SERENITY_NETFLAGS="
+        #-netdev user,id=breh,hostfwd=tcp:127.0.0.1:8888-10.0.2.15:8888,hostfwd=tcp:127.0.0.1:8823-10.0.2.15:23,hostfwd=tcp:127.0.0.1:8000-10.0.2.15:8000,hostfwd=tcp:127.0.0.1:2222-10.0.2.15:22 \
+        #-device $SERENITY_ETHERNET_DEVICE_TYPE,netdev=breh \
+        #"
+        #-netdev tap,id=br0,ifname=tap0,script=no,downscript=no \
+        #-netdev bridge,id=br0,br=virtbr0 \
         SERENITY_NETFLAGS="
-        -netdev user,id=breh,hostfwd=tcp:127.0.0.1:8888-10.0.2.15:8888,hostfwd=tcp:127.0.0.1:8823-10.0.2.15:23,hostfwd=tcp:127.0.0.1:8000-10.0.2.15:8000,hostfwd=tcp:127.0.0.1:2222-10.0.2.15:22 \
-        -device $SERENITY_ETHERNET_DEVICE_TYPE,netdev=breh \
+        -netdev bridge,id=br0,br=virtbr0 \
+        -device e1000,netdev=br0,mac=52:55:00:99:99:98 \
         "
     fi
     "$SERENITY_QEMU_BIN" \

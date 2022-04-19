@@ -229,8 +229,8 @@ void handle_ipv4(EthernetFrameHeader const& eth, size_t frame_size, Time const& 
 
 void handle_ipv6(EthernetFrameHeader const& eth, size_t frame_size, Time const& packet_timestamp)
 {
-    dbgln("ETH: {} -> {} [{}]", eth.source().to_string(), eth.destination().to_string(), frame_size);
-    // ouch
+    (void)frame_size;
+    //dbgln("ETH: {} -> {} [{}]", eth.source().to_string(), eth.destination().to_string(), frame_size);
     auto& packet = *static_cast<IPv6Packet const*>(eth.payload());
     //packet.set_version(7);
     //packet.set_traffic_class(99);
